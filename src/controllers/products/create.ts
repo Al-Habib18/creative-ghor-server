@@ -2,13 +2,21 @@
 
 import { Request, Response } from "express";
 import { createProduct as createNewProduct } from "../../services/products";
+import demo from "../../utils/demo";
 
 const createProduct = async (req: Request, res: Response) => {
     try {
         //TODO: validate data
         //TODO: check permission
 
-        const data = req.body;
+        //upload image to cloudinar
+        //TODO: validate image
+        let data = req.body;
+
+        const imageUrl = req.file?.path;
+
+        // let data = demo(req.body);
+        data.images[0] = imageUrl;
 
         const product = await createNewProduct(data);
 

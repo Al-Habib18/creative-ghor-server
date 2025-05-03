@@ -76,7 +76,6 @@ model Order {
   quantity           Int
   totalAmount        Float
   orderStatus        OrderStatus
-  provider           String
   paymentStatus      PaymentStatus
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt

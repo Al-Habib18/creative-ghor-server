@@ -10,11 +10,12 @@ import {
     deleteProductById,
     getAllReviewsOfProduct,
 } from "../controllers/products/index";
+import upload from "../middleware/multer";
 
 const router = require("express").Router();
 
 router.get("/", getAllProducts);
-router.post("/", createProduct);
+router.post("/", upload.single("image"), createProduct);
 
 router.get("/:id", getProductById);
 router.put("/:id", updateProductById);
