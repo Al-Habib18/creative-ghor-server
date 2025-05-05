@@ -16,10 +16,10 @@ CREATE TABLE "Product" (
     "price" DOUBLE PRECISION NOT NULL,
     "discount" DOUBLE PRECISION,
     "category" "Category" NOT NULL,
-    "images" TEXT[],
+    "image" TEXT NOT NULL,
     "stock" INTEGER NOT NULL,
-    "rating" DOUBLE PRECISION NOT NULL,
-    "reviewsCount" INTEGER NOT NULL,
+    "rating" DOUBLE PRECISION DEFAULT 0,
+    "reviewsCount" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -49,7 +49,6 @@ CREATE TABLE "Order" (
     "quantity" INTEGER NOT NULL,
     "totalAmount" DOUBLE PRECISION NOT NULL,
     "orderStatus" "OrderStatus" NOT NULL,
-    "provider" TEXT NOT NULL,
     "paymentStatus" "PaymentStatus" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -60,6 +59,7 @@ CREATE TABLE "Order" (
 -- CreateTable
 CREATE TABLE "ShippingAddress" (
     "id" TEXT NOT NULL,
+    "orderId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "division" TEXT NOT NULL,
     "district" TEXT NOT NULL,

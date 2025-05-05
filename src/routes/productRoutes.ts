@@ -12,15 +12,18 @@ import {
 } from "../controllers/products/index";
 import upload from "../middleware/multer";
 
+import { requireAuth } from "@clerk/express";
+
 const router = require("express").Router();
 
-router.get("/", getAllProducts);
-router.post("/", upload.single("image"), createProduct);
+router.get("/", getAllProducts); // public route
+router.post("/", upload.single("image"), requireAuth(), createProduct);
 
-router.get("/:id", getProductById);
-router.put("/:id", updateProductById);
-router.delete("/:id", deleteProductById);
+router.get("/:id", getProductById); // public route
 
-router.get("/:id/reviews", getAllReviewsOfProduct);
+router.put("/:id", requireAuth(), updateProductById);
+router.delete("/:id", requireAuth(), deleteProductById);
+
+router.get("/:id/reviews", getAllReviewsOfProduct); // public route
 
 export default router;

@@ -4,7 +4,9 @@ import cors from "cors";
 import express from "express";
 import { PORT } from "./config/env";
 import routes from "./routes";
+import paymentSuccessRoute from "./routes/paymentSuccessRoute";
 import morgan from "morgan";
+import { clerkMiddleware } from "@clerk/express";
 
 const app = express();
 
@@ -14,15 +16,23 @@ const corsOptions = {
     credentials: true, // Allow credentials (cookies, headers, etc.)
 };
 
-app.use(cors(corsOptions));
+app.use(paymentSuccessRoute);
+
 app.use(express.json());
+app.use(cors(corsOptions));
 app.use(morgan("dev"));
-app.use(express.urlencoded({ extended: true })); //
+app.use(clerkMiddleware());
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/hello", (req, res) => {
+    res.json({ message: "hello world" });
+});
 // Use combined routes
 app.use(routes);
 
-app.get("/", (req, res) => {
-    res.send("Hello World!");
+app.use("/*", (req, res) => {
+    console.log("url:-", req.url);
+    res.status(404).json({ message: "Route Not Found" });
 });
 
 // Start Server

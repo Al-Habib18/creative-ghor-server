@@ -21,10 +21,10 @@ model Product {
   price        Float
   discount     Float?    // optional
   category     Category
-  images       String[]  // array of image URLs
+  image        String  //  image URLs
   stock        Int
-  rating       Float
-  reviewsCount Int
+  rating       Float?  @default(0)
+  reviewsCount Int?     @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -72,11 +72,11 @@ model Order {
   id                 String              @id @default(cuid())
   userId             String
   shippingAddressId  String
-  productId          String[]
+  productIds         String[]
   quantity           Int
   totalAmount        Float
-  orderStatus        OrderStatus
-  paymentStatus      PaymentStatus
+  orderStatus        OrderStatus      @default(PENDING)
+  paymentStatus      PaymentStatus    @default(UNPAID)
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
 

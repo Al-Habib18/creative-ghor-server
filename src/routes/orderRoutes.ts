@@ -8,11 +8,12 @@ import {
     updateOrderById,
     deleteOrderById,
 } from "../controllers/orders/index";
+import { requireAuth } from "@clerk/express";
 
 const router = express.Router();
 
 router.get("/", getAllOrders);
-router.post("/", createOrder);
+router.post("/", requireAuth(), createOrder);
 
 router.get("/:id", getOrderById);
 router.put("/:id", updateOrderById);
