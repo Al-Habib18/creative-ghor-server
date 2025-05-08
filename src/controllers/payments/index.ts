@@ -1,6 +1,11 @@
 /** @format */
 
-import successController from "./successController";
+import paymentSuccessController from "./paymentSuccess";
 import paymentInitController from "./paymentInit";
+import paymentFailController from "./paymentFail";
 
-export { successController, paymentInitController };
+export {
+    paymentSuccessController,
+    paymentInitController,
+    paymentFailController,
+};

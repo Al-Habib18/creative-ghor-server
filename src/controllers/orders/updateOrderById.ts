@@ -3,12 +3,24 @@
 import { Request, Response } from "express";
 import { getOrderById as findProductById } from "../../services/orders";
 import { updateOrderById as updateOrder } from "../../services/orders";
+import { badRequest } from "../../utils/request";
+import { idSchema, updateOrderSchema } from "../../schemas/index";
 
 const updateOrderById = async (req: Request, res: Response) => {
     try {
-        const id = req.params.id;
+        const { paymentStatus, orderStatus } = req.body;
 
-        //TODO: validtae id
+        const id = req.params.id;
+        if (!id) return badRequest(res, "No order id found");
+
+        const result = idSchema.safeParse(id);
+        if (!result.success) return badRequest(res, result.error.message);
+
+        if (!paymentStatus || !orderStatus)
+            return badRequest(res, "No paymentStatus or orderStatus found");
+
+        const result2 = updateOrderSchema.safeParse(req.body);
+        if (!result2.success) return badRequest(res, result2.error.message);
 
         const product = await findProductById(id);
 

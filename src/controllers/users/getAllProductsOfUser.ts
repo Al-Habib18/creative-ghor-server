@@ -2,9 +2,15 @@
 
 import { Request, Response } from "express";
 import { getAllProductsOfUser as getAllProductsOfSingleUser } from "../../services/users";
+import { idSchema } from "../../schemas/index";
+import { badRequest } from "../../utils/request";
 const getAllProductsOfUser = async (req: Request, res: Response) => {
     try {
-        const products = await getAllProductsOfSingleUser(req.params.id);
+        const id = req.params.id;
+        const result = idSchema.safeParse(id);
+        if (!result.success) return badRequest(res, result.error.message);
+
+        const products = await getAllProductsOfSingleUser(id);
 
         if (!products) {
             return res.status(404).json({ message: "No products found" });

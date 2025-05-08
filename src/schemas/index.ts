@@ -11,16 +11,6 @@ export const CategoryEnum = z.enum([
     "TOYS",
 ]);
 
-export const OrderStatusEnum = z.enum([
-    "CONFIRMED",
-    "PENDING",
-    "CANCELLED",
-    "SHIPPED",
-    "DELIVERED",
-]);
-
-export const PaymentStatusEnum = z.enum(["PAID", "UNPAID"]);
-
 export const createProductSchema = z.object({
     userId: z.string(),
     name: z.string().min(1),
@@ -30,6 +20,16 @@ export const createProductSchema = z.object({
     category: CategoryEnum,
     image: z.string(),
     stock: z.number().int().nonnegative(),
+});
+
+export const updateProductSchema = z.object({
+    name: z.string().min(1).optional(),
+    description: z.string().min(1).optional(),
+    price: z.number().positive().optional(),
+    discount: z.number().min(0).max(100).optional(),
+    category: CategoryEnum.optional(),
+    image: z.string().optional(),
+    stock: z.number().int().nonnegative().optional(),
 });
 
 export const ReviewSchema = z.object({
@@ -53,6 +53,16 @@ export const createShippingAddressSchema = z.object({
     phoneNumber: z.string().min(10).max(15),
 });
 
+export const OrderStatusEnum = z.enum([
+    "CONFIRMED",
+    "PENDING",
+    "CANCELLED",
+    "SHIPPED",
+    "DELIVERED",
+]);
+
+export const PaymentStatusEnum = z.enum(["PAID", "UNPAID"]);
+
 export const OrderSchema = z.object({
     id: z.string().optional(),
     userId: z.string(),
@@ -66,7 +76,12 @@ export const OrderSchema = z.object({
     updatedAt: z.date().optional(),
 });
 
-export const userIdSchema = z.string();
+export const updateOrderSchema = z.object({
+    orderStatus: OrderStatusEnum.optional(),
+    paymentStatus: PaymentStatusEnum.optional(),
+});
+
+export const idSchema = z.string();
 
 export const UserSchema = z.object({
     id: z.string().optional(),

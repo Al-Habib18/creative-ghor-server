@@ -4,7 +4,7 @@ import cors from "cors";
 import express from "express";
 import { PORT } from "./config/env";
 import routes from "./routes";
-import paymentSuccessRoute from "./routes/paymentSuccessRoute";
+import paymentSuccessRoute from "./routes/paymentRoutes";
 import morgan from "morgan";
 import { clerkMiddleware } from "@clerk/express";
 
@@ -21,7 +21,7 @@ app.use(paymentSuccessRoute);
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(morgan("dev"));
-app.use(clerkMiddleware());
+app.use(clerkMiddleware()); // clerk middleware for auth
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/hello", (req, res) => {

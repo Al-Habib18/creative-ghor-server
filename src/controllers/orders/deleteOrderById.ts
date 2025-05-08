@@ -4,21 +4,21 @@ import { Request, Response } from "express";
 
 /** @format */
 
-import { getOrderById as findProductById } from "../../services/orders";
+import { getOrderById } from "../../services/orders";
 import { deleteOrderById as deleteOrder } from "../../services/orders";
+import { badRequest, notFound } from "../../utils/request";
+import { idSchema } from "../../schemas/index";
 
 const deleteOrderById = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
+        if (!id) return badRequest(res, "No order id found");
 
-        //TODO: validtae id
-        //TODO: validate body
+        const result = idSchema.safeParse(id);
+        if (!result.success) return badRequest(res, result.error.message);
 
-        const product = await findProductById(id);
-
-        if (!product) {
-            return res.status(404).json({ message: "No Order found" });
-        }
+        const order = await getOrderById(id);
+        if (!order) notFound(res, "No order found");
 
         // delete order
         await deleteOrder(id);

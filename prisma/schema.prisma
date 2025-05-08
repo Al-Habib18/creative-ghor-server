@@ -96,3 +96,17 @@ model ShippingAddress {
 
   orders       Order[]  @relation
 }
+
+
+model Payment {
+  id             String   @id @default(cuid())
+  orderId        String
+  paymentStatus  PaymentStatus
+  amount         Float
+  currency       String
+  transactionId  String   @unique
+  paymentMethod  String
+  paymentDate    DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

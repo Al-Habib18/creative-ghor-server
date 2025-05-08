@@ -6,18 +6,18 @@ import SSLCommerzPayment from "sslcommerz-lts";
 
 const paymentInitController = async (req: Request, res: Response) => {
     try {
-        let orderId = Date.now().toString();
-        /*       const { orderId } = req.body;
+        const { orderId } = req.body;
 
         if (!orderId) {
             return res
                 .status(400)
                 .json({ error: "Missing orderId in request body" });
-        } */
+        }
 
         // TODO: Replace with your actual DB call
         // const order = await getOrderById(orderId);
         // if (!order) return res.status(404).json({ error: "Order not found" });
+        
         const amount = 1200; // Replace with: order.totalAmount;
 
         const store_id = process.env.SSL_STORE_ID;
@@ -35,8 +35,8 @@ const paymentInitController = async (req: Request, res: Response) => {
             currency: "BDT",
             tran_id: orderId,
             success_url: `http://localhost:4000/api/payment/success/${orderId}`,
-            fail_url: "http://localhost:4000/api/payment/fail",
-            cancel_url: "http://localhost:4000/api/payment/cancel",
+            fail_url: `http://localhost:4000/api/payment/fail/${orderId}`,
+            cancel_url: `http://localhost:4000/api/payment/cancel/${orderId}`,
             ipn_url: "http://localhost:4000/api/payment/ipn",
             shipping_method: "Courier",
             product_name: "Ecommerce Checkout",

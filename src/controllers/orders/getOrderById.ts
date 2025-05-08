@@ -2,22 +2,24 @@
 
 import { Request, Response } from "express";
 import { getOrderById as findOrderById } from "../../services/orders";
+import { badRequest, notFound } from "../../utils/request";
+import { idSchema } from "../../schemas/index";
 
 const getOrderById = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
+        if (!id) return badRequest(res, "No order id found");
 
-        //TODO: validtae id
+        const result = idSchema.safeParse(id);
+        if (!result.success) return badRequest(res, result.error.message);
 
-        const product = await findOrderById(id);
+        const order = await findOrderById(id);
 
-        if (!product) {
-            return res.status(404).json({ message: "No order found" });
-        }
+        if (!order) notFound(res, "No order found");
 
         res.status(200).json({
-            message: "Order retive Successfully",
-            data: product,
+            message: "Order retrived Successfully",
+            data: order,
         });
     } catch (err) {
         console.log("error in getting order by id", err);

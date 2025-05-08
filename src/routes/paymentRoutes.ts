@@ -2,14 +2,12 @@
 
 import express from "express";
 import {
-    successController,
-    paymentInitController,
-} from "../controllers/payments/index";
-import { requireAuth } from "@clerk/express";
-const router = express.Router();
+    paymentSuccessController,
+    paymentFailController,
+} from "../controllers/payments";
 
-router.post("/init", requireAuth(), paymentInitController);
-router.post("/fail", (req, res) => res.json({ message: "fail" }));
-router.post("/cancel", (req, res) => res.json({ message: "cancel" }));
+const router = express.Router();
+router.use("/api/payment/success/:id", paymentSuccessController);
+router.post("/api/payment/fail/:id", paymentFailController);
 
 export default router;

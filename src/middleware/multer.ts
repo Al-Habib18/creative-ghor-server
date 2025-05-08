@@ -1,6 +1,6 @@
 /** @format */
 
-/* import { CloudinaryStorage } from "multer-storage-cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "../config/cloudanary";
 import multer from "multer";
 
@@ -18,9 +18,8 @@ const upload = multer({
 });
 
 export default upload;
- */
 
-import multer from "multer";
+/* import multer from "multer";
 import path from "path";
 
 const storage = multer.diskStorage({
@@ -34,4 +33,4 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-export default upload;
+export default upload; */

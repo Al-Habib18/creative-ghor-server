@@ -12,9 +12,9 @@ import { requireAuth } from "@clerk/express";
 
 const router = express.Router();
 
+// router.use(requireAuth()); // protected all routes
 router.get("/", getAllOrders);
-router.post("/", requireAuth(), createOrder);
-
+router.post("/", createOrder);
 router.get("/:id", getOrderById);
 router.put("/:id", updateOrderById);
 router.delete("/:id", deleteOrderById);

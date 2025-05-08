@@ -14,6 +14,7 @@ const createProduct = async (req: Request, res: Response) => {
         if (!userId) unauthorized(res, "Unauthorized");
         if (!req.body) badRequest(res, "No body found");
         if (!req.file) badRequest(res, "No file found");
+
         const data = {
             userId: userId as string,
             name: name as string,
@@ -26,9 +27,11 @@ const createProduct = async (req: Request, res: Response) => {
         };
 
         const result = createProductSchema.safeParse(data);
-
         if (!result.success) badRequest(res, result.error.message);
+
+        //create product in database
         const product = await createNewProduct(result.data);
+
         res.status(201).json({
             message: "Product created successfully",
             data: product,
