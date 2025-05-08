@@ -8,7 +8,7 @@ import { badRequest, serverError, unauthorized } from "../../utils/request";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import s3 from "../../config/s3";
 import { v4 as uuidv4 } from "uuid";
-import { AWS_BUCKET_NAME, AWS_REGION } from "../../config/env";
+import { AWS_S3_BUCKET_NAME, AWS_REGION } from "../../config/env";
 
 const createProduct = async (req: Request, res: Response) => {
     try {
@@ -20,17 +20,21 @@ const createProduct = async (req: Request, res: Response) => {
         const file = req.file;
         const uniqueKey = `products/${uuidv4()}-${file.originalname}`;
 
+        if (!file) return badRequest(res, "No file found");
+        if (!file.buffer) return badRequest(res, "No file buffer found");
+        if (!file.mimetype) return badRequest(res, "No file mimetype found");
+
         // Upload file to S3
         await s3.send(
             new PutObjectCommand({
-                Bucket: AWS_BUCKET_NAME,
+                Bucket: AWS_S3_BUCKET_NAME,
                 Key: uniqueKey,
                 Body: file.buffer,
                 ContentType: file.mimetype,
             })
         );
 
-        const imageUrl = `https://${AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${uniqueKey}`;
+        const imageUrl = `https://${AWS_S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${uniqueKey}`;
 
         const data = {
             userId,
