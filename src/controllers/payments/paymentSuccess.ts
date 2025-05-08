@@ -6,6 +6,7 @@ import { badRequest } from "../../utils/request";
 import { idSchema } from "../../schemas/index";
 import { PaymentStatus } from "@prisma/client";
 import { createPayment } from "../../services/payment";
+import sendPaymentSuccessEmail from "../../utils/email";
 
 const paymentSuccessController = async (req: Request, res: Response) => {
     try {
@@ -17,8 +18,11 @@ const paymentSuccessController = async (req: Request, res: Response) => {
         // Update the payment status of the order
         await updatePaymentStatusOfOrderById(id, PaymentStatus.PAID);
 
-        //TODO: Create the payment record in the database
+        //Create the payment record in the database
         await createPayment(id);
+
+        // send email to the user
+        await sendPaymentSuccessEmail(id);
 
         // Redirect to a confirmation page on the frontend
         res.writeHead(302, {

@@ -1,36 +1,32 @@
 /** @format */
 
-import { CloudinaryStorage } from "multer-storage-cloudinary";
-import cloudinary from "../config/cloudanary";
-import multer from "multer";
+import multer, { FileFilterCallback } from "multer";
+import { Request } from "express";
 
-const storage = new CloudinaryStorage({
-    cloudinary,
-    params: () => ({
-        folder: "creative-ghor",
-        allowed_formats: ["jpg", "png"],
-    }),
-});
+// Use memory storage for direct upload to S3
+const storage = multer.memoryStorage();
 
+// Accept only JPEG and PNG images
+const fileFilter = (
+    req: Request,
+    file: Express.Multer.File,
+    cb: FileFilterCallback
+): void => {
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error("Only JPEG and PNG images are allowed"));
+    }
+};
+
+// Export configured multer middleware
 const upload = multer({
     storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // optional: max 5MB
+    fileFilter,
+    limits: {
+        fileSize: 5 * 1024 * 1024, // Optional: limit file size to 5MB
+    },
 });
 
 export default upload;
-
-/* import multer from "multer";
-import path from "path";
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/");
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    },
-});
-
-const upload = multer({ storage });
-
-export default upload; */

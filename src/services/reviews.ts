@@ -7,6 +7,13 @@ export const getAllReviewsOfProduct = async (id: string) => {
     return reviews;
 };
 
+export const deleteAllReviewsOfProduct = async (id: string) => {
+    const reviews = await prisma.review.deleteMany({
+        where: { productId: id },
+    });
+    return reviews;
+};
+
 export const createReview = async (data: any) => {
     const review = await prisma.review.create({ data });
     return review;
