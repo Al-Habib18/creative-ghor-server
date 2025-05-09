@@ -7,6 +7,7 @@ import routes from "./routes";
 import paymentSuccessRoute from "./routes/paymentRoutes";
 import morgan from "morgan";
 import { clerkMiddleware } from "@clerk/express";
+import serverless from "serverless-http";
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.use(morgan("dev"));
 app.use(clerkMiddleware()); // clerk middleware for auth
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/hello", (req, res) => {
+app.get("/hello", (_req, res) => {
     res.json({ message: "hello world" });
 });
 // Use combined routes
@@ -43,3 +44,23 @@ app.listen(PORT, () => {
 export default app;
 
 // export default app
+
+// aws production environment
+const serverlessApp = serverless(app);
+export const handler = async (event: any, context: any) => {
+    //TODO: seed data base
+    return serverlessApp(event, context);
+};
+
+/* const serverlessApp = serverless(app);
+export const handler = async (event: any, context: any) => {
+  if (event.action === "seed") {
+    await seed();
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: "Data seeded successfully" }),
+    };
+  } else {
+    return serverlessApp(event, context);
+  }
+}; */
